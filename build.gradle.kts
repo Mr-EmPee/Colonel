@@ -1,16 +1,21 @@
 plugins {
-  id("template.java-conventions")
-
+  id("java-library")
   id("io.freefair.lombok") version "8.4"
-  id("com.github.johnrengelman.shadow") version "8.1.0"
   id("com.vanniktech.maven.publish") version "0.28.0"
 }
 
 version = findProperty("tag") ?: "0.0.1-SNAPSHOT"
 
 dependencies {
-  implementation(project(":core"))
+  compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+  compileOnly("com.mojang:brigadier:1.0.18")
+
+  implementation("me.lucko:commodore:2.2") {
+    isTransitive = false
+  }
 }
+
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 mavenPublishing {
   coordinates("io.github.mr-empee", "colonel", version.toString())

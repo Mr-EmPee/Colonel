@@ -7,39 +7,35 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import io.github.empee.colonel.BrigadierExceptions;
 import io.github.empee.colonel.BrigadierExceptions.Type;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.concurrent.CompletableFuture;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class EnumArgumentType<T extends Enum<T>> implements CustomArgumentType<T> {
-
-  private final Class<T> enumClass;
-
-  public static <T extends Enum<T>> EnumArgumentType<T> enumArg(Class<T> enumClass) {
-    return new EnumArgumentType<>(enumClass);
-  }
-
+@RequiredArgsConstructor(staticName = "playerArg")
+public class PlayerArgumentType implements CustomArgumentType<Player> {
   @Override
-  public T parse(StringReader reader) throws CommandSyntaxException {
+  public Player parse(StringReader reader) throws CommandSyntaxException {
     int start = reader.getCursor();
-    String literal = reader.readString();
 
-    try {
-      return Enum.valueOf(enumClass, literal.toUpperCase());
-    } catch (IllegalArgumentException e) {
+    String playerName = reader.readString();
+    Player player = Bukkit.getPlayer(playerName);
+
+    if (player == null) {
       reader.setCursor(start);
-      throw BrigadierExceptions.createWithContext(Type.LITERAL_INCORRECT, reader, literal);
+      throw BrigadierExceptions.createWithContext(Type.PLAYER_NOT_FOUND, reader, playerName);
     }
+
+    return player;
   }
 
   @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-    for (T value : enumClass.getEnumConstants()) {
-      builder.suggest(value.name());
+    for (var value : Bukkit.getOnlinePlayers()) {
+      builder.suggest(value.getName());
     }
 
     return builder.buildFuture();

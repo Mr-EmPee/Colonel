@@ -4,8 +4,8 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.ArgumentCommandNode;
 import com.mojang.brigadier.tree.CommandNode;
-import lombok.experimental.UtilityClass;
 import io.github.empee.colonel.arguments.CustomArgumentType;
+import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class CommodoreAdapter {
