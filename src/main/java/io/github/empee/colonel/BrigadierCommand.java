@@ -1,11 +1,13 @@
 package io.github.empee.colonel;
 
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import io.github.empee.colonel.BrigadierExceptions.Type;
+import io.github.empee.colonel.helpers.BrigadierCompositor;
 import lombok.SneakyThrows;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
@@ -14,6 +16,10 @@ import org.bukkit.entity.Player;
 public abstract class BrigadierCommand<S> {
 
   public abstract LiteralArgumentBuilder<S> get();
+
+  protected BrigadierCompositor<S> node(ArgumentBuilder<S, ?>... args) {
+    return BrigadierCompositor.compositionOf(args);
+  }
 
   protected LiteralArgumentBuilder<S> literal(String name) {
     return LiteralArgumentBuilder.literal(name);

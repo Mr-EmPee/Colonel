@@ -19,9 +19,11 @@ public abstract class BrigadierManager<S> {
   private final JavaPlugin plugin;
   private final CommandDispatcher<S> dispatcher;
 
-  protected boolean logging = true;
-
-  public void register(LiteralArgumentBuilder<S> command) {
+  /**
+   * @return The label of the command that has been registered.
+   * A prefix may be attached to it if there was a conflict
+   */
+  public String register(LiteralArgumentBuilder<S> command) {
     var brigadierCmd = dispatcher.register(command);
     var bukkitCmd = new CommandAdapter<>(brigadierCmd, this);
     var status = getCommandMap().register(plugin.getName(), bukkitCmd);
@@ -30,13 +32,7 @@ public abstract class BrigadierManager<S> {
       CommodoreProvider.getCommodore(plugin).register(CommodoreAdapter.mapToCompatibleNode(brigadierCmd));
     }
 
-    if (status) {
-      if (logging) {
-        plugin.getLogger().info("The command '" + bukkitCmd.getName() + "' has been registered successfully");
-      }
-    } else {
-      plugin.getLogger().warning("The command '" + bukkitCmd.getName() + "' has a conflict, use '" + plugin.getName() + ":" + bukkitCmd.getName() + "'");
-    }
+    return status ? bukkitCmd.getName() : plugin.getName() + ":" + bukkitCmd.getName();
   }
 
   protected abstract S getSource(CommandSender source);
