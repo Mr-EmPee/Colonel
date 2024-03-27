@@ -13,10 +13,6 @@ import org.bukkit.entity.Player;
 
 public abstract class BrigadierCommand<S> {
 
-  public BrigadierCommand(BrigadierManager<S> manager) {
-    manager.register(get());
-  }
-
   public abstract LiteralArgumentBuilder<S> get();
 
   protected LiteralArgumentBuilder<S> literal(String name) {
