@@ -7,15 +7,16 @@ plugins {
 version = findProperty("tag") ?: "0.0.4-SNAPSHOT"
 
 dependencies {
-  compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+  compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
   compileOnly("com.mojang:brigadier:1.0.18")
+  compileOnly("org.jetbrains:annotations:24.1.0")
 
   implementation("me.lucko:commodore:2.2") {
     isTransitive = false
   }
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(11))
 
 mavenPublishing {
   coordinates("io.github.mr-empee", "colonel", version.toString())

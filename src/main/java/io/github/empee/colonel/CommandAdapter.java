@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 class CommandAdapter<S> extends Command {
   private final CommandDispatcher<S> dispatcher;
@@ -54,7 +55,7 @@ class CommandAdapter<S> extends Command {
     return manager.getSuggestions(sender, getRawInput(alias, args))
         .join().getList().stream()
         .map(Suggestion::getText)
-        .toList();
+        .collect(Collectors.toList());
   }
 
 }
